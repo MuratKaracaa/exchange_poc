@@ -4,9 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/homebrew/include",
-                "/usr/local/include/quickfix",
-                "/usr/local/include"
+                "${workspaceFolder}/build/_deps/quickfix-src/src/C++",
+                "${workspaceFolder}/build/_deps/concurrentqueue-src"
             ],
             "defines": [],
             "cStandard": "c17",

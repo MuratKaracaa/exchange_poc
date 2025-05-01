@@ -1,12 +1,12 @@
 #include <iostream>
 #include <string>
-#include <quickfix/FileStore.h>
-#include <quickfix/FileLog.h>
-#include <quickfix/SocketAcceptor.h>
-#include <quickfix/Session.h>
-#include <quickfix/SessionSettings.h>
-#include <quickfix/Application.h>
-#include <quickfix/MessageCracker.h>
+#include <FileStore.h>
+#include <FileLog.h>
+#include <SocketAcceptor.h>
+#include <Session.h>
+#include <SessionSettings.h>
+#include <Application.h>
+#include <MessageCracker.h>
 
 class TestApplication : public FIX::Application, public FIX::MessageCracker {
 public:
