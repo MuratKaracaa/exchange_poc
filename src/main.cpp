@@ -7,31 +7,15 @@
 #include <SessionSettings.h>
 #include <Application.h>
 #include <MessageCracker.h>
-
-class TestApplication : public FIX::Application, public FIX::MessageCracker {
-public:
-    void onCreate(const FIX::SessionID&) override {}
-    void onLogon(const FIX::SessionID& sessionID) override {
-        std::cout << "Logon - " << sessionID.toString() << std::endl;
-    }
-    void onLogout(const FIX::SessionID& sessionID) override {
-        std::cout << "Logout - " << sessionID.toString() << std::endl;
-    }
-    void toAdmin(FIX::Message&, const FIX::SessionID&) override {}
-    void fromAdmin(const FIX::Message&, const FIX::SessionID&)  override {}
-    void toApp(FIX::Message&, const FIX::SessionID&)  override {}
-    void fromApp(const FIX::Message& message, const FIX::SessionID& sessionID)  override {
-        crack(message, sessionID);
-        std::cout << "Message received: " << message.toString() << std::endl;
-    }
-};
+#include <NewOrderSingle.h>
+#include "acceptor_application.h"
 
 int main() {
     try {
         std::string configFile = "quickfix_config.cfg";
         FIX::SessionSettings settings(configFile);
         
-        TestApplication application;
+        AcceptorApplication application;
         FIX::FileStoreFactory storeFactory(settings);
         FIX::FileLogFactory logFactory(settings);
         

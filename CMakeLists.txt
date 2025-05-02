@@ -21,17 +21,30 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(ConcurrentQueue)
 
-add_executable(exchange_poc src/main.cpp)
+FetchContent_Declare(
+    ankerl_unordered_dense
+    GIT_REPOSITORY https://github.com/martinus/unordered_dense.git
+    GIT_TAG        main
+)
+FetchContent_MakeAvailable(ankerl_unordered_dense)
 
-# Adjusted include paths after inspecting the actual structure
+file(GLOB_RECURSE SOURCE_FILES 
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+)
+
+add_executable(exchange_poc ${SOURCE_FILES})
+
 target_include_directories(exchange_poc
     PRIVATE
         ${quickfix_SOURCE_DIR}/src/C++
+        ${quickfix_SOURCE_DIR}/src/C++/fix42
         ${quickfix_BINARY_DIR}/src/C++
         ${concurrentqueue_SOURCE_DIR}
+        ${ankerl_unordered_dense_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-# Link against the QuickFIX library
 target_link_libraries(exchange_poc
     PRIVATE
         quickfix

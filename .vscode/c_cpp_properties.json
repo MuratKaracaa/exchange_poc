@@ -3,9 +3,12 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/include",
                 "${workspaceFolder}/build/_deps/quickfix-src/src/C++",
-                "${workspaceFolder}/build/_deps/concurrentqueue-src"
+                "${workspaceFolder}/build/_deps/concurrentqueue-src",
+                "${workspaceFolder}/build/_deps/quickfix-src/src/C++/fix42",
+                "${workspaceFolder}/build/_deps/ankerl_unordered_dense-src/include"
             ],
             "defines": [],
             "cStandard": "c17",

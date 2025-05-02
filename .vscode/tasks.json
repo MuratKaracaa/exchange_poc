@@ -2,6 +2,39 @@
     "tasks": [
         {
             "type": "cppbuild",
+            "label": "C/C++: g++ build project",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-std=c++23",
+                "-fdiagnostics-color=always",
+                "-g",
+                "${workspaceFolder}/src/main.cpp",
+                "${workspaceFolder}/src/acceptor_application.cpp",
+                "-o",
+                "${workspaceFolder}/exchange_poc",
+                "-I${workspaceFolder}/src",
+                "-I${workspaceFolder}/include",
+                "-I${workspaceFolder}/build/_deps/quickfix-src/src/C++",
+                "-I${workspaceFolder}/build/_deps/quickfix-build/src/C++",
+                "-I${workspaceFolder}/build/_deps/concurrentqueue-src",
+                "-I${workspaceFolder}/build/_deps/quickfix-src/src/C++/fix42/",
+                "-L${workspaceFolder}/build/_deps/quickfix-build/src/C++",
+                "-lquickfix"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Build entire project with QuickFIX libraries"
+        },
+        {
+            "type": "cppbuild",
             "label": "C/C++: g++ build active file",
             "command": "/usr/bin/g++",
             "args": [
@@ -11,12 +44,12 @@
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
-                "-I/usr/local/include",
-                "-I/opt/homebrew/include",
-                "-L/usr/local/lib",
-                "-L/opt/homebrew/lib",
-                "-lquickfix",
-                "-lpthread"
+                "-I${workspaceFolder}/src",
+                "-I${workspaceFolder}/include",
+                "-I${workspaceFolder}/build/_deps/quickfix-src/src/C++",
+                "-I${workspaceFolder}/build/_deps/quickfix-build/src/C++",
+                "-I${workspaceFolder}/build/_deps/concurrentqueue-src",
+                "-I${workspaceFolder}/build/_deps/quickfix-src/src/C++/fix42/"
             ],
             "options": {
                 "cwd": "${fileDirname}"
@@ -25,10 +58,9 @@
                 "$gcc"
             ],
             "group": {
-                "kind": "build",
-                "isDefault": true
+                "kind": "build"
             },
-            "detail": "Build with QuickFIX libraries"
+            "detail": "Build active file with QuickFIX libraries"
         }
     ],
     "version": "2.0.0"

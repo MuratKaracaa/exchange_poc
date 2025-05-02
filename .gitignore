@@ -53,3 +53,4 @@ cmake-build-release/
 
 *.cfg
 build
+exchange_poc
