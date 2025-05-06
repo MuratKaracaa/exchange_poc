@@ -7,6 +7,26 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(FetchContent)
 
+find_package(Boost 1.74.0 COMPONENTS system thread)
+if(NOT Boost_FOUND)
+    set(BOOST_INCLUDE_LIBRARIES system thread)
+    set(BOOST_ENABLE_CMAKE ON)
+    FetchContent_Declare(
+        Boost
+        GIT_REPOSITORY https://github.com/boostorg/boost.git
+        GIT_TAG boost-1.83.0
+        GIT_SHALLOW ON
+    )
+    FetchContent_MakeAvailable(Boost)
+endif()
+
+FetchContent_Declare(
+    bs_thread_pool
+    GIT_REPOSITORY https://github.com/bshoshany/thread-pool.git
+    GIT_TAG v4.0.1
+)
+FetchContent_MakeAvailable(bs_thread_pool)
+
 FetchContent_Declare(
     QuickFIX
     GIT_REPOSITORY https://github.com/quickfix/quickfix.git
@@ -41,6 +61,7 @@ target_include_directories(exchange_poc
         ${quickfix_BINARY_DIR}/src/C++
         ${concurrentqueue_SOURCE_DIR}
         ${ankerl_unordered_dense_SOURCE_DIR}/include
+        ${bs_thread_pool_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
@@ -48,4 +69,7 @@ target_include_directories(exchange_poc
 target_link_libraries(exchange_poc
     PRIVATE
         quickfix
+        $<$<BOOL:${Boost_FOUND}>:Boost::system>
+        $<$<BOOL:${Boost_FOUND}>:Boost::thread>
+        $<$<NOT:$<BOOL:${Boost_FOUND}>>:Boost::boost>
 )

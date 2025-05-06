@@ -39,18 +39,4 @@ public:
     const std::string& getTimestamp() const {
         return timestamp_;
     }
-    
-    bool operator<(const Order& other) const {
-        if (price_ != other.price_) {
-            return price_ < other.price_; 
-        }
-        return timestamp_ > other.timestamp_; 
-    }
-    
-    bool operator>(const Order& other) const {
-        if (price_ != other.price_) {
-            return price_ > other.price_; 
-        }
-        return timestamp_ < other.timestamp_; 
-    }
 };
