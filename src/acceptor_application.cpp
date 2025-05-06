@@ -1,8 +1,10 @@
 #include "acceptor_application.h"
 #include <iostream>
 #include "NewOrderSingle.h"
+#include "mapper.h"
+#include <optional>
 
-AcceptorApplication::AcceptorApplication(ankerl::unordered_dense::map<std::string, std::shared_ptr<Stock>>& stock_map)
+AcceptorApplication::AcceptorApplication(ankerl::unordered_dense::map<std::string, Stock>& stock_map)
     : stock_map(stock_map) {}
 
 
@@ -34,6 +36,18 @@ void AcceptorApplication::fromAdmin(const FIX::Message& message, const FIX::Sess
     
 }
 
-void AcceptorApplication::onMessage(const FIX42::NewOrderSingle& order, const FIX::SessionID& sessionId) {
-
+void AcceptorApplication::onMessage(const FIX42::NewOrderSingle& fixOrder, const FIX::SessionID& sessionId) {
+    try
+    {
+        std::optional<Order> optionalOrder = Mapper::fromFixToOrder(fixOrder);
+        if (optionalOrder) {
+            Order order = std::move(*optionalOrder);
+            stock_map[order.getSymbol()].incomingOrders.enqueue(std::move(order));
+        }
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 }
+

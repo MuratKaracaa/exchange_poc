@@ -3,6 +3,7 @@
 #include <FileStore.h>
 #include <FileLog.h>
 #include <SocketAcceptor.h>
+#include <ThreadedSocketAcceptor.h>
 #include <Session.h>
 #include <SessionSettings.h>
 #include <Application.h>
@@ -11,15 +12,16 @@
 #include "acceptor_application.h"
 
 int main() {
+    ankerl::unordered_dense::map<std::string, Stock> stock_map;
     try {
         std::string configFile = "quickfix_config.cfg";
         FIX::SessionSettings settings(configFile);
         
-        AcceptorApplication application;
+        AcceptorApplication application(stock_map);
         FIX::FileStoreFactory storeFactory(settings);
         FIX::FileLogFactory logFactory(settings);
         
-        FIX::SocketAcceptor acceptor(application, storeFactory, settings, logFactory);
+        FIX::ThreadedSocketAcceptor acceptor(application, storeFactory, settings, logFactory);
         acceptor.start();
         
         std::cout << "QuickFIX acceptor started. Press Enter to quit." << std::endl;

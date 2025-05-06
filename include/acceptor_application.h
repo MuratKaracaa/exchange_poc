@@ -7,10 +7,10 @@
 
 class AcceptorApplication : public FIX::Application, public FIX::MessageCracker {
 private:
-    ankerl::unordered_dense::map<std::string, std::shared_ptr<Stock>> stock_map;
+    ankerl::unordered_dense::map<std::string, Stock> stock_map;
 
 public:
-    AcceptorApplication(ankerl::unordered_dense::map<std::string, std::shared_ptr<Stock>>& stock_map);
+    AcceptorApplication(ankerl::unordered_dense::map<std::string, Stock>& stock_map);
 
     void onCreate(const FIX::SessionID& sessionID) override;
     void onLogon(const FIX::SessionID& sessionID) override;

@@ -10,6 +10,7 @@
                 "-g",
                 "${workspaceFolder}/src/main.cpp",
                 "${workspaceFolder}/src/acceptor_application.cpp",
+                "${workspaceFolder}/src/mapper.cpp",
                 "-o",
                 "${workspaceFolder}/exchange_poc",
                 "-I${workspaceFolder}/src",
@@ -19,6 +20,7 @@
                 "-I${workspaceFolder}/build/_deps/concurrentqueue-src",
                 "-I${workspaceFolder}/build/_deps/quickfix-src/src/C++/fix42/",
                 "-L${workspaceFolder}/build/_deps/quickfix-build/src/C++",
+                "-L${workspaceFolder}/build/_deps/ankerl_unordered_dense-src/include",
                 "-lquickfix"
             ],
             "options": {
