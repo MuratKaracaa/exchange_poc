@@ -4,8 +4,8 @@
 #include "mapper.h"
 #include <optional>
 
-AcceptorApplication::AcceptorApplication(ankerl::unordered_dense::map<std::string, Stock>& stock_map)
-    : stock_map(stock_map) {}
+AcceptorApplication::AcceptorApplication(ankerl::unordered_dense::map<std::string, Stock>& stock_map, moodycamel::ConcurrentQueue<Order>& order_queue)
+    : stock_map_(stock_map), order_queue_(order_queue) {}
 
 
 void AcceptorApplication::onCreate(const FIX::SessionID &sessionID)
@@ -42,7 +42,17 @@ void AcceptorApplication::onMessage(const FIX42::NewOrderSingle& fixOrder, const
         std::optional<Order> optionalOrder = Mapper::fromFixToOrder(fixOrder);
         if (optionalOrder) {
             Order order = std::move(*optionalOrder);
-            stock_map[order.getSymbol()].incomingOrders.enqueue(std::move(order));
+            if(!stock_map_.contains(order.getSymbol())){
+
+            }
+
+            if(order.getPrice() <= 0) {
+
+            }
+            if(order.getQuantity() <= 0){
+
+            }
+            order_queue_.enqueue(order);
         }
     }
     catch(const std::exception& e)

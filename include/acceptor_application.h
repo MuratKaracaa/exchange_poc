@@ -7,10 +7,11 @@
 
 class AcceptorApplication : public FIX::Application, public FIX::MessageCracker {
 private:
-    ankerl::unordered_dense::map<std::string, Stock> stock_map;
+    ankerl::unordered_dense::map<std::string, Stock> stock_map_;
+    moodycamel::ConcurrentQueue<Order> order_queue_;
 
 public:
-    AcceptorApplication(ankerl::unordered_dense::map<std::string, Stock>& stock_map);
+    AcceptorApplication(ankerl::unordered_dense::map<std::string, Stock>& stock_map, moodycamel::ConcurrentQueue<Order>& order_queue);
 
     void onCreate(const FIX::SessionID& sessionID) override;
     void onLogon(const FIX::SessionID& sessionID) override;

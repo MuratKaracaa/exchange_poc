@@ -12,17 +12,10 @@ std::optional<Order> Mapper::fromFixToOrder(const FIX42::NewOrderSingle& order) 
         order.get(quantity);
         order.get(ordType);
         
-        if(quantity <= 0){
-            return std::nullopt;
-        }
-        
         double price = 0.0;
         if (ordType == FIX::OrdType_LIMIT) {
             FIX::Price fixPrice;
             order.get(fixPrice);
-            if(fixPrice <= 0){
-                return std::nullopt;
-            }
             price = fixPrice;
         }
         

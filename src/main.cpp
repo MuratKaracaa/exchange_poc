@@ -10,14 +10,19 @@
 #include <MessageCracker.h>
 #include <NewOrderSingle.h>
 #include "acceptor_application.h"
+#include <atomic>
+
+constexpr std::atomic_flag global_processing_state {false};
+
 
 int main() {
     ankerl::unordered_dense::map<std::string, Stock> stock_map;
+    moodycamel::ConcurrentQueue<Order> order_queue;
     try {
         std::string configFile = "quickfix_config.cfg";
         FIX::SessionSettings settings(configFile);
         
-        AcceptorApplication application(stock_map);
+        AcceptorApplication application(stock_map, order_queue);
         FIX::FileStoreFactory storeFactory(settings);
         FIX::FileLogFactory logFactory(settings);
         
