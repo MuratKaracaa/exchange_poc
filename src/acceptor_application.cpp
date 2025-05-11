@@ -4,8 +4,8 @@
 #include "mapper.h"
 #include <optional>
 
-AcceptorApplication::AcceptorApplication(ankerl::unordered_dense::map<std::string, Stock>& stock_map, moodycamel::ConcurrentQueue<Order>& order_queue)
-    : stock_map_(stock_map), order_queue_(order_queue) {}
+AcceptorApplication::AcceptorApplication(ankerl::unordered_dense::map<std::string, Stock>& stock_map_, moodycamel::ConcurrentQueue<Order>& order_queue_)
+    : stock_map(stock_map_), order_queue(order_queue_) {}
 
 
 void AcceptorApplication::onCreate(const FIX::SessionID &sessionID)
@@ -39,20 +39,20 @@ void AcceptorApplication::fromAdmin(const FIX::Message& message, const FIX::Sess
 void AcceptorApplication::onMessage(const FIX42::NewOrderSingle& fixOrder, const FIX::SessionID& sessionId) {
     try
     {
-        std::optional<Order> optionalOrder = Mapper::fromFixToOrder(fixOrder);
+        std::optional<Order> optionalOrder = Mapper::from_fix_to_order(fixOrder);
         if (optionalOrder) {
             Order order = std::move(*optionalOrder);
-            if(!stock_map_.contains(order.getSymbol())){
+            if(!stock_map.contains(order.get_symbol())){
 
             }
 
-            if(order.getPrice() <= 0) {
+            if(order.get_price() <= 0) {
 
             }
-            if(order.getQuantity() <= 0){
+            if(order.get_quantity() <= 0){
 
             }
-            order_queue_.enqueue(order);
+            order_queue.enqueue(order);
         }
     }
     catch(const std::exception& e)

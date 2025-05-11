@@ -10,9 +10,7 @@
 #include <MessageCracker.h>
 #include <NewOrderSingle.h>
 #include "acceptor_application.h"
-#include <atomic>
 
-constexpr std::atomic_flag global_processing_state {false};
 
 
 int main() {

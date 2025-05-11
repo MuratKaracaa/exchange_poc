@@ -4,6 +4,6 @@
 
 class Mapper {
     public:
-        static std::optional<Order> fromFixToOrder(const FIX42::NewOrderSingle& fixOrder);
+        static std::optional<Order> from_fix_to_order(const FIX42::NewOrderSingle& fix_order);
     };
     

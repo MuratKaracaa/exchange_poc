@@ -2,26 +2,24 @@
 #include "order.h"
 #include "order_side.h"
 #include "order_type.h"
-
-constexpr int heap_arity = 4;
-constexpr bool heap_mutability = false;
+#include "constants.h"
 
 struct BuyOrderComparator {
     bool operator()(const Order& a, const Order& b) const {
 
-        if (a.getPrice() != b.getPrice()) {
-            return a.getPrice() < b.getPrice();
+        if (a.get_price() != b.get_price()) {
+            return a.get_price() < b.get_price();
         }
-        return a.getTimestamp() > b.getTimestamp();
+        return a.get_time_stamp() > b.get_time_stamp();
     }
 };
 
 struct SellOrderComparator {
     bool operator()(const Order& a, const Order& b) const {
-        if (a.getPrice() != b.getPrice()) {
-            return a.getPrice() > b.getPrice(); 
+        if (a.get_price() != b.get_price()) {
+            return a.get_price() > b.get_price(); 
         }
-        return a.getTimestamp() > b.getTimestamp();
+        return a.get_time_stamp() > b.get_time_stamp();
     }
 };
 
@@ -41,50 +39,50 @@ typedef boost::heap::d_ary_heap<
 
 class OrderBook {
     private:
-        BuyOrderQueue buyOrders;
-        SellOrderQueue sellOrders;
+        BuyOrderQueue buy_orders;
+        SellOrderQueue sell_orders;
     
     public:
         void addOrder(const Order& order) {
-            if (order.getOrderSide() == OrderSide::BUY) {
-                buyOrders.push(order);
+            if (order.get_order_side() == OrderSide::BUY) {
+                buy_orders.push(order);
             } else {
-                sellOrders.push(order);
+                sell_orders.push(order);
             }
         }
         
-        std::optional<Order> getTopBuyOrder() {
-            if (buyOrders.empty()) {
+        std::optional<Order> get_top_buy_order() {
+            if (buy_orders.empty()) {
                 return std::nullopt;
             }
-            Order top = buyOrders.top();
-            buyOrders.pop();
+            Order top = buy_orders.top();
+            buy_orders.pop();
             return top;
         }
         
-        std::optional<Order> getTopSellOrder() {
-            if (sellOrders.empty()) {
+        std::optional<Order> get_top_sell_order() {
+            if (sell_orders.empty()) {
                 return std::nullopt;
             }
-            Order top = sellOrders.top();
-            sellOrders.pop();
+            Order top = sell_orders.top();
+            sell_orders.pop();
             return top;
         }
         
-        bool getCanMatch() const {
-            if (buyOrders.empty() || sellOrders.empty()) {
+        bool get_can_match() const {
+            if (buy_orders.empty() || sell_orders.empty()) {
                 return false;
             }
 
-            return buyOrders.top().getPrice() >= sellOrders.top().getPrice();
+            return buy_orders.top().get_price() >= sell_orders.top().get_price();
         }
         
 
-        size_t getBuyOrdersSize() const { 
-            return buyOrders.size(); 
+        size_t get_buy_orders_size() const { 
+            return buy_orders.size(); 
         }
 
-        size_t getSellOrdersSize() const { 
-            return sellOrders.size(); 
+        size_t get_sell_orders_size() const { 
+            return sell_orders.size(); 
         }
     };

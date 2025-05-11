@@ -1,6 +1,6 @@
 #include "mapper.h"
 
-std::optional<Order> Mapper::fromFixToOrder(const FIX42::NewOrderSingle& order) {
+std::optional<Order> Mapper::from_fix_to_order(const FIX42::NewOrderSingle& order) {
     try {
         FIX::Symbol symbol;
         FIX::Side side;

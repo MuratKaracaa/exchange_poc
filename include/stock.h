@@ -10,6 +10,5 @@ class Stock {
         OrderBook orderBook_;
     
     public:
-    
         Stock() = default;
     };

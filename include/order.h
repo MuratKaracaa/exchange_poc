@@ -20,22 +20,22 @@ public:
         : symbol_(std::move(symbol)), orderType_(orderType), orderSide_(orderSide),
           quantity_(quantity), price_(price), timestamp_(timestamp) {}
 
-    const std::string& getSymbol() const { 
+    const std::string& get_symbol() const { 
         return symbol_; 
     }
-    OrderType getOrderType() const { 
+    OrderType get_order_type() const { 
         return orderType_; 
     }
-    int getQuantity() const { 
+    int get_quantity() const { 
         return quantity_; 
     }
-    double getPrice() const { 
+    double get_price() const { 
         return price_; 
     }
-    OrderSide getOrderSide() const {
+    OrderSide get_order_side() const {
         return orderSide_;
     }
-    const std::string& getTimestamp() const {
+    const std::string& get_time_stamp() const {
         return timestamp_;
     }
 };
