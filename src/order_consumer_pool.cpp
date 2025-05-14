@@ -63,13 +63,12 @@ void OrderConsumerPool::process_order(const Order &incoming_order)
     Stock &stock = stock_map[incoming_order.get_symbol()];
     OrderBook &order_book = stock.get_order_book();
     int remaining_incoming_order_quantity = incoming_order.get_quantity();
-    std::vector<std::string> orders_to_be_notified;
 
     if (incoming_order.get_order_type() == OrderType::MARKET)
     {
         while (remaining_incoming_order_quantity)
         {
-            std::optional<Order> next_sell_order_optional = order_book.get_top_sell_order();
+            std::optional<Order> next_sell_order_optional = incoming_order.get_order_side() == OrderSide::BUY ? order_book.get_top_sell_order() : order_book.get_top_buy_order();
             if (!next_sell_order_optional)
             {
                 order_book.add_market_order(incoming_order);
@@ -78,6 +77,13 @@ void OrderConsumerPool::process_order(const Order &incoming_order)
             else
             {
                 Order &next_sell_order = *next_sell_order_optional;
+                int remaining_temp = remaining_incoming_order_quantity;
+                remaining_incoming_order_quantity = std::max(0, remaining_incoming_order_quantity - next_sell_order.get_quantity());
+                if (next_sell_order.get_quantity() - remaining_temp)
+                {
+                    next_sell_order.reduce_quantity(remaining_temp);
+                    order_book.add_market_order(next_sell_order);
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
 #include "mapper.h"
 
-std::optional<Order> Mapper::from_fix_to_order(const FIX42::NewOrderSingle &order, const std::string session_id)
+std::optional<Order> Mapper::from_fix_to_order(const FIX42::NewOrderSingle &order, const FIX::SessionID &session_id)
 {
     try
     {

@@ -7,7 +7,7 @@
 class Order
 {
 private:
-    std::string session_id_;
+    FIX::SessionID session_id_;
     std::string order_id_;
     std::string symbol_;
     OrderType orderType_;
@@ -17,12 +17,12 @@ private:
     std::string timestamp_;
 
 public:
-    Order(std::string session_id, std::string order_id, std::string symbol, OrderType orderType, OrderSide orderSide, int quantity,
+    Order(FIX::SessionID session_id, std::string order_id, std::string symbol, OrderType orderType, OrderSide orderSide, int quantity,
           double price, std::string timestamp = "")
         : session_id_(std::move(session_id)), order_id_(std::move(order_id)), symbol_(std::move(symbol)), orderType_(orderType), orderSide_(orderSide),
           quantity_(quantity), price_(price), timestamp_(timestamp) {}
 
-    const std::string &get_session_id() const
+    const FIX::SessionID &get_session_id() const
     {
         return session_id_;
     }

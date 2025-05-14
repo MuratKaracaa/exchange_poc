@@ -42,7 +42,7 @@ void AcceptorApplication::onMessage(const FIX42::NewOrderSingle &fixOrder, const
 {
     try
     {
-        std::optional<Order> optionalOrder = Mapper::from_fix_to_order(fixOrder);
+        std::optional<Order> optionalOrder = Mapper::from_fix_to_order(fixOrder, sessionId);
         if (optionalOrder)
         {
             Order order = std::move(*optionalOrder);
