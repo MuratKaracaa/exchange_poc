@@ -11,29 +11,30 @@
 #include <NewOrderSingle.h>
 #include "acceptor_application.h"
 
-
-
-int main() {
+int main()
+{
     ankerl::unordered_dense::map<std::string, Stock> stock_map;
     moodycamel::ConcurrentQueue<Order> order_queue;
-    try {
+    try
+    {
         std::string configFile = "quickfix_config.cfg";
         FIX::SessionSettings settings(configFile);
-        
+
         AcceptorApplication application(stock_map, order_queue);
         FIX::FileStoreFactory storeFactory(settings);
         FIX::FileLogFactory logFactory(settings);
-        
+
         FIX::ThreadedSocketAcceptor acceptor(application, storeFactory, settings, logFactory);
         acceptor.start();
-        
+
         std::cout << "QuickFIX acceptor started. Press Enter to quit." << std::endl;
         std::cin.get();
-        
+
         acceptor.stop();
         return 0;
     }
-    catch (std::exception& e) {
+    catch (std::exception &e)
+    {
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
