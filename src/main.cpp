@@ -15,12 +15,13 @@ int main()
 {
     ankerl::unordered_dense::map<std::string, Stock> stock_map;
     moodycamel::ConcurrentQueue<Order> order_queue;
+    SessionSet session_set;
     try
     {
         std::string configFile = "quickfix_config.cfg";
         FIX::SessionSettings settings(configFile);
 
-        AcceptorApplication application(stock_map, order_queue);
+        AcceptorApplication application(stock_map, order_queue, session_set);
         FIX::FileStoreFactory storeFactory(settings);
         FIX::FileLogFactory logFactory(settings);
 

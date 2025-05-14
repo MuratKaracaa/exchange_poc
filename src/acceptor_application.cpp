@@ -4,8 +4,8 @@
 #include "mapper.h"
 #include <optional>
 
-AcceptorApplication::AcceptorApplication(ankerl::unordered_dense::map<std::string, Stock> &stock_map_, moodycamel::ConcurrentQueue<Order> &order_queue_)
-    : stock_map(stock_map_), order_queue(order_queue_) {}
+AcceptorApplication::AcceptorApplication(ankerl::unordered_dense::map<std::string, Stock> &stock_map_, moodycamel::ConcurrentQueue<Order> &order_queue_, SessionSet &session_set_)
+    : stock_map(stock_map_), order_queue(order_queue_), session_set(session_set_) {}
 
 void AcceptorApplication::onCreate(const FIX::SessionID &sessionID)
 {
@@ -14,12 +14,12 @@ void AcceptorApplication::onCreate(const FIX::SessionID &sessionID)
 
 void AcceptorApplication::onLogon(const FIX::SessionID &sessionID)
 {
-    std::cout << "Logon: " << sessionID << std::endl;
+    session_set.insert(sessionID);
 }
 
 void AcceptorApplication::onLogout(const FIX::SessionID &sessionID)
 {
-    std::cout << "Logout: " << sessionID << std::endl;
+    session_set.erase(sessionID);
 }
 
 void AcceptorApplication::fromApp(const FIX::Message &message, const FIX::SessionID &sessionID)
