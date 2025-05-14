@@ -40,7 +40,7 @@ std::optional<Order> Mapper::from_fix_to_order(const FIX42::NewOrderSingle &orde
         OrderType orderType = (ordType == FIX::OrdType_LIMIT) ? OrderType::LIMIT : OrderType::MARKET;
         OrderSide orderSide = side == FIX::Side_BUY ? OrderSide::BUY : OrderSide::SELL;
 
-        return Order(session_id, order_id, symbol.getValue(), orderType, orderSide, static_cast<int>(quantity), price, timestamp);
+        return std::optional<Order>(Order(session_id, order_id, symbol.getValue(), orderType, orderSide, static_cast<int>(quantity), price, timestamp));
     }
     catch (const std::exception &e)
     {

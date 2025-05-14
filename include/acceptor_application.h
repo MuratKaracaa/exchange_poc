@@ -8,8 +8,8 @@
 class AcceptorApplication : public FIX::Application, public FIX::MessageCracker
 {
 private:
-    ankerl::unordered_dense::map<std::string, Stock> stock_map;
-    moodycamel::ConcurrentQueue<Order> order_queue;
+    ankerl::unordered_dense::map<std::string, Stock> &stock_map;
+    moodycamel::ConcurrentQueue<Order> &order_queue;
 
 public:
     AcceptorApplication(ankerl::unordered_dense::map<std::string, Stock> &stock_map_, moodycamel::ConcurrentQueue<Order> &order_queue_);

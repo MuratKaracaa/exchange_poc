@@ -3,6 +3,7 @@
 #include <string>
 #include "order_type.h"
 #include "order_side.h"
+#include "SessionID.h"
 
 class Order
 {
@@ -17,6 +18,14 @@ private:
     std::string timestamp_;
 
 public:
+    Order() : order_id_(""),
+              symbol_(""),
+              orderType_(OrderType::LIMIT),
+              orderSide_(OrderSide::BUY),
+              quantity_(0),
+              price_(0),
+              timestamp_("") {}
+
     Order(FIX::SessionID session_id, std::string order_id, std::string symbol, OrderType orderType, OrderSide orderSide, int quantity,
           double price, std::string timestamp = "")
         : session_id_(std::move(session_id)), order_id_(std::move(order_id)), symbol_(std::move(symbol)), orderType_(orderType), orderSide_(orderSide),

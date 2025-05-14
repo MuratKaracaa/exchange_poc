@@ -1,3 +1,5 @@
+#pragma once
+
 #include <atomic>
 constexpr std::atomic<bool> global_processing_state{false};
 constexpr int heap_arity = 4;

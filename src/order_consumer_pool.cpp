@@ -1,12 +1,13 @@
 #include "order_consumer_pool.h"
 #include <thread>
 #include <iostream>
-#include <constants.h>
-#include "stock.h"
+#include <algorithm> // For std::max
+#include "constants.h"
 
 OrderConsumerPool::OrderConsumerPool(moodycamel::ConcurrentQueue<Order> &queue_, ankerl::unordered_dense::map<std::string, Stock> &stock_map_, size_t thread_count_, size_t batch_size_)
     : order_queue(queue_), stock_map(stock_map_), batch_size(batch_size_), thread_count(thread_count_)
 {
+    consumer_tokens.reserve(thread_count);
 
     for (size_t i = 0; i < thread_count; ++i)
     {
@@ -23,7 +24,6 @@ OrderConsumerPool::~OrderConsumerPool()
 
 void OrderConsumerPool::start()
 {
-
     for (size_t i = 0; i < thread_count; ++i)
     {
         thread_pool->submit_task([this, i]()
@@ -66,7 +66,7 @@ void OrderConsumerPool::process_order(const Order &incoming_order)
 
     if (incoming_order.get_order_type() == OrderType::MARKET)
     {
-        while (remaining_incoming_order_quantity)
+        while (remaining_incoming_order_quantity > 0)
         {
             std::optional<Order> next_sell_order_optional = incoming_order.get_order_side() == OrderSide::BUY ? order_book.get_top_sell_order() : order_book.get_top_buy_order();
             if (!next_sell_order_optional)
@@ -79,7 +79,7 @@ void OrderConsumerPool::process_order(const Order &incoming_order)
                 Order &next_sell_order = *next_sell_order_optional;
                 int remaining_temp = remaining_incoming_order_quantity;
                 remaining_incoming_order_quantity = std::max(0, remaining_incoming_order_quantity - next_sell_order.get_quantity());
-                if (next_sell_order.get_quantity() - remaining_temp)
+                if (next_sell_order.get_quantity() - remaining_temp > 0)
                 {
                     next_sell_order.reduce_quantity(remaining_temp);
                     order_book.add_market_order(next_sell_order);

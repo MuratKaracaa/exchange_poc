@@ -1,3 +1,5 @@
+#pragma once
+
 #include "order_book.h"
 #include "concurrentqueue.h"
 
