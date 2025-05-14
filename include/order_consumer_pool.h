@@ -25,8 +25,6 @@ public:
     OrderConsumerPool& operator=(OrderConsumerPool&&) = delete;
 
 private:
-    void consume_orders();
-    
     void process_batch(const std::vector<Order>& orders, size_t count);
     
     void process_order(const Order& order);
