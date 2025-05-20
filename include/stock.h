@@ -15,18 +15,7 @@ private:
 public:
     Stock() = default;
 
-    OrderBook &get_order_book()
-    {
-        return orderBook_;
-    }
-
-    void update_volume(long quantity)
-    {
-        volume += quantity;
-    }
-
-    long get_volume() const
-    {
-        return volume;
-    }
+    OrderBook &get_order_book();
+    void update_volume(long quantity);
+    long get_volume() const;
 };

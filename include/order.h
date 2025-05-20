@@ -31,42 +31,13 @@ public:
         : session_id_(std::move(session_id)), order_id_(std::move(order_id)), symbol_(std::move(symbol)), orderType_(orderType), orderSide_(orderSide),
           quantity_(quantity), price_(price), timestamp_(timestamp) {}
 
-    const FIX::SessionID &get_session_id() const
-    {
-        return session_id_;
-    }
-
-    const std::string &get_order_id() const
-    {
-        return order_id_;
-    }
-
-    const std::string &get_symbol() const
-    {
-        return symbol_;
-    }
-    OrderType get_order_type() const
-    {
-        return orderType_;
-    }
-    int get_quantity() const
-    {
-        return quantity_;
-    }
-    double get_price() const
-    {
-        return price_;
-    }
-    OrderSide get_order_side() const
-    {
-        return orderSide_;
-    }
-    const std::string &get_time_stamp() const
-    {
-        return timestamp_;
-    }
-    void reduce_quantity(const int quantity)
-    {
-        quantity_ -= quantity;
-    }
+    const FIX::SessionID &get_session_id() const;
+    const std::string &get_order_id() const;
+    const std::string &get_symbol() const;
+    OrderType get_order_type() const;
+    int get_quantity() const;
+    double get_price() const;
+    OrderSide get_order_side() const;
+    const std::string &get_time_stamp() const;
+    void reduce_quantity(const int quantity);
 };
