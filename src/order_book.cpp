@@ -31,6 +31,18 @@ void OrderBook::add_order(const Order &order)
     }
 }
 
+void OrderBook::add_order(Order &&order)
+{
+    if (order.get_order_side() == OrderSide::BUY)
+    {
+        buy_orders.push(std::move(order));
+    }
+    else
+    {
+        sell_orders.push(std::move(order));
+    }
+}
+
 void OrderBook::add_market_order(const Order &order)
 {
     if (order.get_order_side() == OrderSide::BUY)
@@ -40,6 +52,18 @@ void OrderBook::add_market_order(const Order &order)
     else
     {
         residual_market_sell_orders.enqueue(order);
+    }
+}
+
+void OrderBook::add_market_order(Order &&order)
+{
+    if (order.get_order_side() == OrderSide::BUY)
+    {
+        residual_market_buy_orders.enqueue(std::move(order));
+    }
+    else
+    {
+        residual_market_sell_orders.enqueue(std::move(order));
     }
 }
 

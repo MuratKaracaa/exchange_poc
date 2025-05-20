@@ -19,4 +19,14 @@ public:
     {
         return orderBook_;
     }
+
+    void update_volume(long quantity)
+    {
+        volume += quantity;
+    }
+
+    long get_volume() const
+    {
+        return volume;
+    }
 };

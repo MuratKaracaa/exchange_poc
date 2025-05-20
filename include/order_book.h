@@ -44,7 +44,9 @@ public:
     OrderBook() = default;
 
     void add_order(const Order &order);
+    void add_order(Order &&order);
     void add_market_order(const Order &order);
+    void add_market_order(Order &&order);
     std::optional<Order> get_next_market_buy_order();
     std::optional<Order> get_next_market_sell_order();
     std::optional<Order> get_top_buy_order();

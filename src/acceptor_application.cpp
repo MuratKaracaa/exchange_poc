@@ -55,7 +55,7 @@ void AcceptorApplication::onMessage(const FIX42::NewOrderSingle &fixOrder, const
             if (order.get_quantity() <= 0)
             {
             }
-            order_queue.enqueue(order);
+            order_queue.enqueue(std::move(order));
         }
     }
     catch (const std::exception &e)

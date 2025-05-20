@@ -36,6 +36,11 @@ public:
         return session_id_;
     }
 
+    const std::string &get_order_id() const
+    {
+        return order_id_;
+    }
+
     const std::string &get_symbol() const
     {
         return symbol_;
