@@ -101,7 +101,7 @@ void OrderConsumerPool::process_order(Order &&incoming_order)
                     order_book.add_market_order(std::move(matching_order));
                 }
 
-                stock.update_volume(executed_quantity);
+                stock.update_trading_info(execution_price, executed_quantity);
                 send_trade_notifications(incoming_order, matching_order, execution_price, executed_quantity);
             }
         }
@@ -139,7 +139,7 @@ void OrderConsumerPool::process_order(Order &&incoming_order)
                 order_book.add_order(std::move(matching_order));
             }
 
-            stock.update_volume(executed_quantity);
+            stock.update_trading_info(execution_price, executed_quantity);
             send_trade_notifications(incoming_order, matching_order, execution_price, executed_quantity);
         }
     }
@@ -173,7 +173,7 @@ void OrderConsumerPool::send_trade_notifications(const Order &order, const Order
             order.get_symbol(),
             execution_price,
             execution_quantity,
-            stock_map[order.get_symbol()].get_volume());
+            stock_map[order.get_symbol()].get_trading_info().volume);
         execution_publisher.publish_market_data(update);
     }
 }
