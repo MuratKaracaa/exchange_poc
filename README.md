@@ -7,11 +7,11 @@ A multi-threaded exchange system proof of concept that demonstrates modern C++ c
 The system implements a high-throughput order matching engine with the following key components:
 
 ```mermaid
-flowchart TD
-    subgraph Clients
-        C1[Client Session 1]
-        C2[Client Session 2]
-        C3[Client Session N]
+flowchart LR
+    subgraph Input Sessions
+        S1[Session 1]
+        S2[Session 2]
+        S3[Session 3]
     end
 
     subgraph Exchange
@@ -19,17 +19,23 @@ flowchart TD
         Q1[Lock-free Order Queue]
         P[Order Consumer Pool]
         Q2[Notification Queue]
-        E[Execution Publisher]
+        E[Execution Publisher Pool]
         B[Order Books]
     end
 
-    C1 & C2 & C3 -->|FIX Protocol| A
+    subgraph Output Sessions
+        R1[Session 1]
+        R2[Session 2]
+        R3[Session 3]
+    end
+
+    S1 & S2 & S3 -->|FIX Protocol| A
     A -->|Orders| Q1
     Q1 -->|Batch Processing| P
-    P -->|Matching| B
+    P -->|Hasn't Matched Yet| B
     P -->|Execution Reports| Q2
     Q2 -->|Notifications| E
-    E -->|Updates| C1 & C2 & C3
+    E -->|Updates| R1 & R2 & R3
 ```
 
 ## Key Features
