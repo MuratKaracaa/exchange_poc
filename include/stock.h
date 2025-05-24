@@ -44,6 +44,12 @@ public:
     Stock(const Stock &) = delete;
     Stock &operator=(const Stock &) = delete;
 
+    const std::string &get_symbol() const;
+    const std::string &get_stock_name() const;
+
+    void set_symbol(const std::string &sym);
+    void set_stock_name(const std::string &name);
+
     OrderBook &get_order_book();
     TradingInfo get_trading_info() const;
     void update_trading_info(double price, long quantity);

@@ -48,6 +48,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(ankerl_unordered_dense)
 
+FetchContent_Declare(
+    json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.11.3
+)
+FetchContent_MakeAvailable(json)
+
 file(GLOB_RECURSE SOURCE_FILES 
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 )
@@ -62,6 +69,7 @@ target_include_directories(exchange_poc
         ${concurrentqueue_SOURCE_DIR}
         ${ankerl_unordered_dense_SOURCE_DIR}/include
         ${bs_thread_pool_SOURCE_DIR}/include
+        ${json_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
