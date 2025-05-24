@@ -28,7 +28,7 @@ int main()
     try
     {
 
-        std::string stocks_file = "src/stocks.json";
+        std::string stocks_file = "stocks.json";
         if (!loadStocksFromJSON(stocks_file, stock_map))
         {
             std::cerr << "Failed to load stocks from " << stocks_file << std::endl;
@@ -52,7 +52,7 @@ int main()
             processed_batch_size);
         order_consumer_pool.start();
 
-        std::string configFile = "src/quickfix_config.cfg";
+        std::string configFile = "quickfix_config.cfg";
         FIX::SessionSettings settings(configFile);
 
         AcceptorApplication application(stock_map, order_queue, session_set);
