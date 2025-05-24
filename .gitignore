@@ -53,4 +53,5 @@ cmake-build-release/
 
 *.cfg
 build
+stocks.json
 exchange_poc
