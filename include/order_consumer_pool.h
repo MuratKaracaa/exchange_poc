@@ -36,7 +36,10 @@ private:
     void process_order(Order &&order);
 
     void send_trade_notifications(const Order &order, const Order &matched_order,
-                                  double execution_price, int execution_quantity);
+                                  double execution_price, int execution_quantity,
+                                  const std::string &timestamp);
+
+    std::string generate_timestamp();
 
     moodycamel::ConcurrentQueue<Order> &order_queue;
 

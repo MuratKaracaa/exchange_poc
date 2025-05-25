@@ -25,6 +25,17 @@ OrderConsumerPool::~OrderConsumerPool()
     stop();
 }
 
+std::string OrderConsumerPool::generate_timestamp()
+{
+    auto now = std::chrono::system_clock::now();
+    auto time_t_now = std::chrono::system_clock::to_time_t(now);
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+
+    std::stringstream ss;
+    ss << std::put_time(std::gmtime(&time_t_now), "%Y%m%d-%H:%M:%S") << "." << std::setfill('0') << std::setw(3) << ms.count();
+    return ss.str();
+}
+
 void OrderConsumerPool::start()
 {
     for (size_t i = 0; i < thread_count; ++i)
@@ -101,8 +112,10 @@ void OrderConsumerPool::process_order(Order &&incoming_order)
                     order_book.add_market_order(std::move(matching_order));
                 }
 
+                std::string timestamp = generate_timestamp();
+
                 stock.update_trading_info(execution_price, executed_quantity);
-                send_trade_notifications(incoming_order, matching_order, execution_price, executed_quantity);
+                send_trade_notifications(incoming_order, matching_order, execution_price, executed_quantity, timestamp);
             }
         }
     }
@@ -139,14 +152,17 @@ void OrderConsumerPool::process_order(Order &&incoming_order)
                 order_book.add_order(std::move(matching_order));
             }
 
+            std::string timestamp = generate_timestamp();
+
             stock.update_trading_info(execution_price, executed_quantity);
-            send_trade_notifications(incoming_order, matching_order, execution_price, executed_quantity);
+            send_trade_notifications(incoming_order, matching_order, execution_price, executed_quantity, timestamp);
         }
     }
 }
 
 void OrderConsumerPool::send_trade_notifications(const Order &order, const Order &matched_order,
-                                                 double execution_price, int execution_quantity)
+                                                 double execution_price, int execution_quantity,
+                                                 const std::string &timestamp)
 {
     {
         ExecutionReportData report(
@@ -154,7 +170,8 @@ void OrderConsumerPool::send_trade_notifications(const Order &order, const Order
             matched_order.get_session_id(),
             matched_order.get_order_id(),
             execution_quantity,
-            execution_price);
+            execution_price,
+            timestamp);
         execution_publisher.publish_execution_report(report);
     }
 
@@ -163,7 +180,8 @@ void OrderConsumerPool::send_trade_notifications(const Order &order, const Order
             order.get_symbol(),
             execution_price,
             execution_quantity,
-            stock_map[order.get_symbol()].get_trading_info().volume);
+            stock_map[order.get_symbol()].get_trading_info().volume,
+            timestamp);
         execution_publisher.publish_market_data(update);
     }
 }

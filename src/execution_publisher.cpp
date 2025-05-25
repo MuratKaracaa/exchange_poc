@@ -157,7 +157,17 @@ void ExecutionPublisher::process_execution_report(const ExecutionReportData &rep
 
         message.set(FIX::LastShares(report.executed_qty));
         message.set(FIX::LastPx(report.execution_price));
-        message.set(FIX::TransactTime(FIX::UTCTIMESTAMP()));
+
+        if (!report.execution_time.empty())
+        {
+            FIX::TransactTime transactTime;
+            transactTime.setString(report.execution_time);
+            message.set(transactTime);
+        }
+        else
+        {
+            message.set(FIX::TransactTime(FIX::UTCTIMESTAMP()));
+        }
 
         FIX::Session::sendToTarget(message, report.client_session_id);
     }
@@ -174,9 +184,28 @@ void ExecutionPublisher::process_market_data_update(const MarketDataUpdate &upda
         FIX42::MarketDataSnapshotFullRefresh message(FIX::Symbol(update.symbol));
 
         FIX42::MarketDataSnapshotFullRefresh::NoMDEntries tradeGroup;
-        tradeGroup.set(FIX::MDEntryType('2')); // Trade
+        tradeGroup.set(FIX::MDEntryType('2'));
         tradeGroup.set(FIX::MDEntryPx(update.last_trade_price));
         tradeGroup.set(FIX::MDEntrySize(update.last_trade_quantity));
+
+        if (!update.trade_time.empty())
+        {
+            size_t dashPos = update.trade_time.find('-');
+            if (dashPos != std::string::npos)
+            {
+                std::string dateStr = update.trade_time.substr(0, dashPos);
+                std::string timeStr = update.trade_time.substr(dashPos + 1);
+
+                FIX::MDEntryDate entryDate;
+                entryDate.setString(dateStr);
+                tradeGroup.set(entryDate);
+
+                FIX::MDEntryTime entryTime;
+                entryTime.setString(timeStr);
+                tradeGroup.set(entryTime);
+            }
+        }
+
         message.addGroup(tradeGroup);
 
         message.set(FIX::TotalVolumeTraded(update.total_volume));
