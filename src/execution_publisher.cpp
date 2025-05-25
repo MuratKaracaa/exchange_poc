@@ -69,6 +69,8 @@ void ExecutionPublisher::stop()
 {
     execution_publisher_running.store(false, std::memory_order_relaxed);
 
+    thread_pool->wait();
+
     std::shared_ptr<NotificationBase> notification;
     while (notification_queue.try_dequeue(notification))
     {
@@ -97,8 +99,6 @@ void ExecutionPublisher::stop()
             }
         }
     }
-
-    thread_pool->wait();
 }
 
 void ExecutionPublisher::process_batch(const std::vector<std::shared_ptr<NotificationBase>> &notifications, size_t count)

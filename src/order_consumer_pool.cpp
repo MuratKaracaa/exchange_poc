@@ -55,7 +55,15 @@ void OrderConsumerPool::start()
                 } else {
                     std::this_thread::yield();
                 }
-            } });
+            }
+            
+            size_t remaining_count;
+            do {
+                remaining_count = order_queue.try_dequeue_bulk(token, orders.data(), batch_size);
+                if (remaining_count > 0) {
+                    process_batch(orders, remaining_count);
+                }
+            } while (remaining_count > 0); });
     }
 }
 
@@ -63,13 +71,13 @@ void OrderConsumerPool::stop()
 {
     global_processing_state.store(false, std::memory_order_relaxed);
 
+    thread_pool->wait();
+
     Order order;
     while (order_queue.try_dequeue(order))
     {
         process_order(std::move(order));
     }
-
-    thread_pool->wait();
 }
 
 void OrderConsumerPool::process_batch(std::vector<Order> &orders, size_t count)
