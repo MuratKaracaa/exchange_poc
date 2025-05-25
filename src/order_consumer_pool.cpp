@@ -150,16 +150,6 @@ void OrderConsumerPool::send_trade_notifications(const Order &order, const Order
 {
     {
         ExecutionReportData report(
-            order.get_symbol(),
-            order.get_session_id(),
-            order.get_order_id(),
-            execution_quantity,
-            execution_price);
-        execution_publisher.publish_execution_report(report);
-    }
-
-    {
-        ExecutionReportData report(
             matched_order.get_symbol(),
             matched_order.get_session_id(),
             matched_order.get_order_id(),
