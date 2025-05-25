@@ -5,12 +5,7 @@
 #include "SessionID.h"
 #include "order_side.h"
 #include "order_type.h"
-
-enum class NotificationType
-{
-    EXECUTION_REPORT,
-    MARKET_DATA_UPDATE
-};
+#include "notification_type.h"
 
 struct NotificationBase
 {
