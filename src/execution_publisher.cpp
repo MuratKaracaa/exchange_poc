@@ -152,10 +152,10 @@ void ExecutionPublisher::process_execution_report(const ExecutionReportData &rep
             FIX::Symbol(report.symbol),
             FIX::Side('1'),
             FIX::LeavesQty(0),
-            FIX::CumQty(report.executed_qty),
+            FIX::CumQty(report.executed_quantity),
             FIX::AvgPx(report.execution_price));
 
-        message.set(FIX::LastShares(report.executed_qty));
+        message.set(FIX::LastShares(report.executed_quantity));
         message.set(FIX::LastPx(report.execution_price));
 
         if (!report.execution_time.empty())

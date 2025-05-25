@@ -27,7 +27,7 @@ struct ExecutionReportData : public NotificationBase
 {
     FIX::SessionID client_session_id;
     std::string order_id;
-    int executed_qty;
+    int executed_quantity;
     double execution_price;
     std::string execution_time;
 
@@ -40,7 +40,7 @@ struct ExecutionReportData : public NotificationBase
         const std::string &execution_time_ = "") : NotificationBase(NotificationType::EXECUTION_REPORT, symbol_),
                                                    client_session_id(client_session_id_),
                                                    order_id(order_id_),
-                                                   executed_qty(executed_qty_),
+                                                   executed_quantity(executed_qty_),
                                                    execution_price(execution_price_),
                                                    execution_time(execution_time_) {}
 };
