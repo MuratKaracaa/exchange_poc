@@ -104,7 +104,7 @@ make
 
 ## Further Required Improvements
 
-- Add persistence layer for order book state
+- Add persistence layer for order book state in an interval based snapshot manner
 - Implement more sophisticated matching algorithms
 - Add risk management features
 - Enhance monitoring and metrics collection
