@@ -99,6 +99,8 @@ void ExecutionPublisher::stop()
             }
         }
     }
+
+    consumer_tokens.clear();
 }
 
 void ExecutionPublisher::process_batch(const std::vector<std::shared_ptr<NotificationBase>> &notifications, size_t count)

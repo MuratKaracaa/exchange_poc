@@ -78,6 +78,8 @@ void OrderConsumerPool::stop()
     {
         process_order(std::move(order));
     }
+
+    consumer_tokens.clear();
 }
 
 void OrderConsumerPool::process_batch(std::vector<Order> &orders, size_t count)
