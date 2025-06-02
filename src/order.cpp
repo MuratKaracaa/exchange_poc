@@ -15,7 +15,7 @@ const std::string &Order::get_symbol() const
     return symbol_;
 }
 
-OrderType Order::get_order_type() const
+FIX::OrdType Order::get_order_type() const
 {
     return orderType_;
 }
@@ -30,7 +30,7 @@ double Order::get_price() const
     return price_;
 }
 
-OrderSide Order::get_order_side() const
+FIX::Side Order::get_order_side() const
 {
     return orderSide_;
 }

@@ -104,12 +104,12 @@ void OrderConsumerPool::process_order(Order &&incoming_order)
     OrderBook &order_book = stock.get_order_book();
     int remaining_incoming_order_quantity = incoming_order.get_quantity();
 
-    if (incoming_order.get_order_type() == OrderType::MARKET)
+    if (incoming_order.get_order_type() == FIX::OrdType_MARKET)
     {
         while (remaining_incoming_order_quantity > 0)
         {
             std::optional<Order> matching_order_optional =
-                incoming_order.get_order_side() == OrderSide::BUY ? order_book.get_top_sell_order() : order_book.get_top_buy_order();
+                incoming_order.get_order_side() == FIX::Side_BUY ? order_book.get_top_sell_order() : order_book.get_top_buy_order();
 
             if (!matching_order_optional)
             {
@@ -137,12 +137,12 @@ void OrderConsumerPool::process_order(Order &&incoming_order)
             }
         }
     }
-    else if (incoming_order.get_order_type() == OrderType::LIMIT)
+    else if (incoming_order.get_order_type() == FIX::OrdType_LIMIT)
     {
         while (remaining_incoming_order_quantity > 0)
         {
             std::optional<Order> matching_order_optional =
-                incoming_order.get_order_side() == OrderSide::BUY ? order_book.get_top_sell_order() : order_book.get_top_buy_order();
+                incoming_order.get_order_side() == FIX::Side_BUY ? order_book.get_top_sell_order() : order_book.get_top_buy_order();
 
             if (!matching_order_optional)
             {
@@ -152,8 +152,8 @@ void OrderConsumerPool::process_order(Order &&incoming_order)
 
             Order matching_order = std::move(*matching_order_optional);
 
-            if ((incoming_order.get_order_side() == OrderSide::BUY && incoming_order.get_price() < matching_order.get_price()) ||
-                (incoming_order.get_order_side() == OrderSide::SELL && incoming_order.get_price() > matching_order.get_price()))
+            if ((incoming_order.get_order_side() == FIX::Side_BUY && incoming_order.get_price() < matching_order.get_price()) ||
+                (incoming_order.get_order_side() == FIX::Side_SELL && incoming_order.get_price() > matching_order.get_price()))
             {
                 order_book.add_order(std::move(matching_order));
                 order_book.add_order(std::move(incoming_order));

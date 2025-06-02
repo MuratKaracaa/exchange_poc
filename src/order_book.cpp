@@ -21,7 +21,7 @@ bool SellOrderComparator::operator()(const Order &a, const Order &b) const
 
 void OrderBook::add_order(const Order &order)
 {
-    if (order.get_order_side() == OrderSide::BUY)
+    if (order.get_order_side() == FIX::Side_BUY)
     {
         buy_orders.push(order);
     }
@@ -33,7 +33,7 @@ void OrderBook::add_order(const Order &order)
 
 void OrderBook::add_order(Order &&order)
 {
-    if (order.get_order_side() == OrderSide::BUY)
+    if (order.get_order_side() == FIX::Side_BUY)
     {
         buy_orders.push(std::move(order));
     }
@@ -45,7 +45,7 @@ void OrderBook::add_order(Order &&order)
 
 void OrderBook::add_market_order(const Order &order)
 {
-    if (order.get_order_side() == OrderSide::BUY)
+    if (order.get_order_side() == FIX::Side_BUY)
     {
         residual_market_buy_orders.enqueue(order);
     }
@@ -57,7 +57,7 @@ void OrderBook::add_market_order(const Order &order)
 
 void OrderBook::add_market_order(Order &&order)
 {
-    if (order.get_order_side() == OrderSide::BUY)
+    if (order.get_order_side() == FIX::Side_BUY)
     {
         residual_market_buy_orders.enqueue(std::move(order));
     }

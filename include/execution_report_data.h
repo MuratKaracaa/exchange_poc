@@ -3,8 +3,6 @@
 #include <string>
 #include <memory>
 #include "SessionID.h"
-#include "order_side.h"
-#include "order_type.h"
 #include "notification_type.h"
 
 struct NotificationBase

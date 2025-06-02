@@ -2,8 +2,6 @@
 
 #include <boost/heap/d_ary_heap.hpp>
 #include "order.h"
-#include "order_side.h"
-#include "order_type.h"
 #include "constants.h"
 #include "concurrentqueue.h"
 #include <optional>
