@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include "constants.h"
+#include "boost/date_time/posix_time/posix_time.hpp"
 
 OrderConsumerPool::OrderConsumerPool(moodycamel::ConcurrentQueue<Order> &queue_, ankerl::unordered_dense::map<std::string, Stock> &stock_map_, ExecutionPublisher &execution_publisher_, size_t thread_count_, size_t batch_size_)
     : order_queue(queue_), stock_map(stock_map_), execution_publisher(execution_publisher_), batch_size(batch_size_), thread_count(thread_count_)
@@ -27,13 +28,20 @@ OrderConsumerPool::~OrderConsumerPool()
 
 std::string OrderConsumerPool::generate_timestamp()
 {
-    auto now = std::chrono::system_clock::now();
-    auto time_t_now = std::chrono::system_clock::to_time_t(now);
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+    boost::posix_time::ptime now = boost::posix_time::microsec_clock::universal_time();
+    std::string iso_string = boost::posix_time::to_iso_extended_string(now);
 
-    std::stringstream ss;
-    ss << std::put_time(std::gmtime(&time_t_now), "%Y%m%d-%H:%M:%S") << "." << std::setfill('0') << std::setw(3) << ms.count();
-    return ss.str();
+    size_t comma_pos = iso_string.find(',');
+    if (comma_pos != std::string::npos)
+    {
+        iso_string[comma_pos] = '.';
+        if (iso_string.length() > comma_pos + 4)
+        {
+            iso_string = iso_string.substr(0, comma_pos + 4);
+        }
+    }
+
+    return iso_string + "Z";
 }
 
 void OrderConsumerPool::start()
