@@ -192,19 +192,11 @@ void ExecutionPublisher::process_market_data_update(const MarketDataUpdate &upda
 
         if (!update.trade_time.empty())
         {
-            size_t dashPos = update.trade_time.find('-');
-            if (dashPos != std::string::npos)
             {
-                std::string dateStr = update.trade_time.substr(0, dashPos);
-                std::string timeStr = update.trade_time.substr(dashPos + 1);
 
                 FIX::MDEntryDate entryDate;
-                entryDate.setString(dateStr);
+                entryDate.setString(update.trade_time);
                 tradeGroup.set(entryDate);
-
-                FIX::MDEntryTime entryTime;
-                entryTime.setString(timeStr);
-                tradeGroup.set(entryTime);
             }
         }
 
